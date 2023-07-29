@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useGlobalContext } from "@/app/context/store";
 
 const formSchema = z.object({
   username: z
@@ -30,6 +31,10 @@ const formSchema = z.object({
 });
 
 function UserAuthForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { isLogin, setIsLogin, setUsername } = useGlobalContext();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,14 +43,29 @@ function UserAuthForm() {
     },
   });
 
-  const router = useRouter();
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    router.push("/home");
+    setIsLoading(true);
+    setTimeout(() => {
+      setUsername(values.username);
+      setIsLogin(true);
+      router.push("/home");
+    }, 1000);
   }
+
+  // https://react.dev/reference/react/useLayoutEffect
+  // useLayoutEffect(() => {
+  //   if (isLogin) {
+  //     router.push("/home");
+  //   }
+  // }, [isLogin, router]);
+
+  useEffect(() => {
+    if (isLogin) {
+      router.push("/home");
+    }
+  }, [isLogin, router]);
 
   return (
     <Form {...form}>
@@ -80,7 +100,25 @@ function UserAuthForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading && (
+            <svg
+              className="mr-2 h-4 w-4 animate-spin"
+              xmlns="http://www.w3.org/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+          )}
+          Sign In
+        </Button>
       </form>
     </Form>
   );
