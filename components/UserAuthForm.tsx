@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/app/context/store";
+import { SIGNIN } from "@/app/constants";
 
 const formSchema = z.object({
   username: z
@@ -79,9 +80,9 @@ function UserAuthForm() {
               <FormControl>
                 <Input placeholder="username" {...field} />
               </FormControl>
-              <FormDescription>
+              {/* <FormDescription>
                 This is your public display name.
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -95,7 +96,7 @@ function UserAuthForm() {
               <FormControl>
                 <Input type="password" placeholder="password" {...field} />
               </FormControl>
-              <FormDescription>This is your password.</FormDescription>
+              {/* <FormDescription>This is your password.</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -117,7 +118,7 @@ function UserAuthForm() {
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>
           )}
-          Sign In
+          {SIGNIN}
         </Button>
       </form>
     </Form>

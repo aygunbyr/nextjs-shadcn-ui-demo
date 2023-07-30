@@ -43,7 +43,7 @@ export const GlobalContextProvider = ({
   //   setUsername(initUsername);
   // }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const initIsLogin = getItem<boolean>("isLogin") || false;
     const initUsername = getItem<string>("username") || "";
     setIsLogin(initIsLogin);
